@@ -28,7 +28,9 @@
 
     <p class="h4 mb-4">Enter your details</p>
 
-    <form action="#" th:action="@{/students/saveCourse}" th:object="${student}" method="POST">
+    <form action="#" th:action="@{/students/saveStudent}" th:object="${student}" method="POST">
+
+        <input type="hidden" th:field="*{id}">
 
         <input type="text" th:field="*{firstName}" class="form-control mb-4 col-4" placeholder="First Name" />
         <p th:if="${#fields.hasErrors('firstName')}" th:errorclass="error" th:errors="*{firstName}" />
@@ -50,6 +52,7 @@
                 </div>
             </th:block>
         </div>
+        <p th:if="${#fields.hasErrors('courses')}" th:errorclass="error" th:errors="*{courses}" />
 
         <button type="submit" class="btn btn-info col-2" >Save</button>
 

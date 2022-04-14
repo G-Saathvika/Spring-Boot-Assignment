@@ -3,8 +3,13 @@ package com.springboot.demo.studentcourse.seviceImpl;
 import com.springboot.demo.studentcourse.enity.Student;
 import com.springboot.demo.studentcourse.repository.StudentRepository;
 import com.springboot.demo.studentcourse.service.StudentService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -19,7 +24,7 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public List<Student> findAll() {
-        return studentRepository.findAll();
+        return (List<Student>) studentRepository.findAll();
     }
 
     @Override
@@ -41,6 +46,5 @@ public class StudentServiceImpl implements StudentService {
     public List<Student> findCourseByStudent() {
         return studentRepository.findCourseByStudent();
     }
-
 
 }

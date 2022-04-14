@@ -1,12 +1,16 @@
 package com.springboot.demo.studentcourse.enity;
 
+import lombok.Data;
+
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import java.util.List;
 
 @Entity
 @Table(name = "course")
-
+@Data
 public class Course {
 
     @Id
@@ -15,7 +19,8 @@ public class Course {
     private int id;
 
     @Column(name = "title")
-    @NotNull(message = "* is required")
+    @NotEmpty(message = "* is required")
+    @Pattern(regexp = "^[a-zA-Z]*",message = "Enter valid name")
     private String title;
 
     @ManyToOne(cascade = {CascadeType.PERSIST,CascadeType.MERGE,CascadeType.DETACH,CascadeType.REFRESH})
@@ -34,42 +39,14 @@ public class Course {
 
     }
 
-    public Course(String title) {
-        this.title = title;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
+    public Course(int id,String title){
         this.id = id;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
         this.title = title;
     }
 
-    public Instructor getInstructor() {
-        return instructor;
+    public Course(String title){
+        this.title = title;
     }
-
-    public void setInstructor(Instructor instructor) {
-        this.instructor = instructor;
-    }
-
-    public List<Student> getStudents() {
-        return students;
-    }
-
-    public void setStudents(List<Student> students) {
-        this.students = students;
-    }
-
     @Override
     public String toString() {
         return "Course{" +

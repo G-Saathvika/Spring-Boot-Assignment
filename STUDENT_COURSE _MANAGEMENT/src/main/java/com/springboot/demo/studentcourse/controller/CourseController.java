@@ -70,7 +70,7 @@ public class CourseController {
             }
         }
         catch (Exception ex){
-            throw new CourseException("Course couldn't be added");
+            return "error";
         }
 
     }

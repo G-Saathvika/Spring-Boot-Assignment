@@ -9,6 +9,12 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
 
     <title>Save Student</title>
+
+    <style>
+    .error {
+        color: red;
+    }
+    </style>
 </head>
 
 <body>
@@ -23,26 +29,29 @@
 
     <form action="#" th:action="@{/students/save}" th:object="${student}" method="POST">
 
-        <input type="hidden" th:field="*{id}" />
+        <input type="hidden" th:field="*{id}">
 
         <input type="text" th:field="*{firstName}" class="form-control mb-4 col-4" placeholder="First Name" />
+        <p th:if="${#fields.hasErrors('firstName')}" th:errorclass="error" th:errors="*{firstName}" />
 
         <input type="text" th:field="*{lastName}" class="form-control mb-4 col-4" placeholder="Last Name" />
+        <p th:if="${#fields.hasErrors('lastName')}"th:errorclass="error" th:errors="*{lastName}" />
 
         <input type="text" th:field="*{email}" class="form-control mb-4 col-4" placeholder="Email" />
+        <p th:if="${#fields.hasErrors('email')}" th:errorclass="error" th:errors="*{email}" />
 
-<!--        <input type="text" th:field="*{courses}" class="form-control mb-4 col-4" placeholder="Courses" />-->
-
+        <!--        <input type="text" th:field="*{courses}" class="form-control mb-4 col-4" placeholder="Course" />-->
         <label class="col-form-label col-sm-4">Courses:</label>
 
         <div class="col-sm-8 text-left">
             <th:block th:each="course : ${courses}">
                 <div>
                     <input type="checkbox" th:field="*{courses}" th:text="${course.title}"
-                           th:value="${course.id}" class="m-2"/>
+                           th:value="${course.id}"  class="m-2"/>
                 </div>
             </th:block>
         </div>
+        <p th:if="${#fields.hasErrors('courses')}" th:errorclass="error" th:errors="*{courses}" />
 
         <button type="submit" class="btn btn-info col-2" >Save</button>
 

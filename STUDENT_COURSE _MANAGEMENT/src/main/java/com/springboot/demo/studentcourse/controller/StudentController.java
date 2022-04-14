@@ -1,8 +1,10 @@
 package com.springboot.demo.studentcourse.controller;
 
+import com.springboot.demo.studentcourse.dto.StudentDTO;
 import com.springboot.demo.studentcourse.enity.Course;
 import com.springboot.demo.studentcourse.enity.Student;
 import com.springboot.demo.studentcourse.service.CourseService;
+import com.springboot.demo.studentcourse.seviceImpl.MappingService;
 import com.springboot.demo.studentcourse.service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.StringTrimmerEditor;
@@ -11,13 +13,14 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
-
 import javax.validation.Valid;
 import java.util.List;
 
 @Controller
 @RequestMapping("/students")
 public class StudentController {
+
+    private MappingService mappingService;
 
     private StudentService studentService;
 
@@ -28,9 +31,10 @@ public class StudentController {
     private static final String STUDENT_LIST= "redirect:/students/list";
 
     @Autowired
-    public StudentController(StudentService theStudentService,CourseService theCourseService){
+    public StudentController(StudentService theStudentService,CourseService theCourseService,MappingService theMappingService){
         studentService = theStudentService;
         courseService = theCourseService;
+        mappingService = theMappingService;
     }
 
     @InitBinder
@@ -44,12 +48,29 @@ public class StudentController {
     @GetMapping("/list")
     public String findAll(Model theModel){
 
-        List<Student> students = studentService.findAll();
+        List<StudentDTO> students = mappingService.getAllStudentCourses();
 
-        theModel.addAttribute(STUDENT,students);
+        if(students.isEmpty()){
+            return "nostudent-list";
+        }
+        else {
+            theModel.addAttribute(STUDENT, students);
 
-        return "students/student-list";
+            //System.out.println(students);
+
+            return "students/student-list";
+        }
     }
+
+//    @GetMapping("/list")
+//    public String findAll(Model theModel){
+//
+//        List<Student> students = studentService.findAll();
+//
+//        theModel.addAttribute(STUDENT,students);
+//
+//        return "students/student-list";
+//    }
 
     @GetMapping("/showFormForAdd")
     public String showFormForAdd(Model theModel){
@@ -60,13 +81,23 @@ public class StudentController {
     }
 
     @PostMapping("/save")
-    public String saveStudent(@Valid @ModelAttribute("student") Student theStudent){
+    public String save(@Valid @ModelAttribute("student") Student student,BindingResult theBindingResult,Model theModel){
 
-            studentService.save(theStudent);
+        if(theBindingResult.hasErrors()){
+
+            //theModel.addAttribute(STUDENT,student);
+            List<Course> courses = courseService.findAll();
+            theModel.addAttribute(COURSE,courses);
+
+            System.out.println("binding result:"+theBindingResult);
+
+            return "students/student-form";
+        }
+        else {
+            studentService.save(student);
 
             return STUDENT_LIST;
-
-
+        }
     }
 
     @GetMapping("/showFormForUpdate")
@@ -103,14 +134,16 @@ public class StudentController {
         return "students/enroll";
     }
 
-    @PostMapping("/saveCourse")
-    public String saveCourse(@Valid @ModelAttribute("student") Student student,BindingResult theBindingResult,Model theModel){
+    @PostMapping("/saveStudent")
+    public String saveStudent(@Valid @ModelAttribute("student") Student student,BindingResult theBindingResult,Model theModel){
 
         if(theBindingResult.hasErrors()){
 
-            theModel.addAttribute(STUDENT,student);
+            //theModel.addAttribute(STUDENT,student);
             List<Course> courses = courseService.findAll();
             theModel.addAttribute(COURSE,courses);
+
+            //System.out.println("binding result:"+theBindingResult);
 
             return "students/enroll";
         }

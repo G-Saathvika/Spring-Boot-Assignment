@@ -1,0 +1,46 @@
+<!DOCTYPE HTML>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+
+    <title>Save Instructor</title>
+</head>
+
+<body>
+<div class="container" >
+    <h1 align="center">Instructor Form</h1>
+
+    <hr>
+
+    <br><br>
+
+    <p class="h4 mb-4">Save Instructor</p>
+
+    <form action="#" th:action="@{/instructors/save}" th:object="${instructor}" method="POST">
+
+        <input type="hidden" th:field="*{id}" />
+
+        <input type="text" th:field="*{firstName}" class="form-control mb-4 col-4" placeholder="First Name" />
+
+        <input type="text" th:field="*{lastName}" class="form-control mb-4 col-4" placeholder="Last Name" />
+
+        <input type="text" th:field="*{email}" class="form-control mb-4 col-4" placeholder="Email" />
+
+        <button type="submit" class="btn btn-info col-2" >Save</button>
+
+    </form>
+
+    <br><br>
+
+    <a th:href="@{/instructors/list}" class="btn btn-primary btn-sm mb-3" >
+        Back to Instructor List
+    </a>
+</div>
+</body>
+
+</html>

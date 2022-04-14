@@ -1,0 +1,74 @@
+<!DOCTYPE HTML>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+
+    <title>Student List</title>
+</head>
+
+<body>
+
+<div class="container">
+
+    <h3 align="center">Students List</h3>
+    <hr>
+
+    <br><br>
+
+    <!--    <p align="right">Logged in user: <b th:inline="text"> [[${#httpServletRequest.remoteUser}]] </b></p>-->
+
+    <div sec:authorize="isAuthenticated()" align="right" style="color:green">
+        Logged user: <span sec:authentication="name"></span>   |
+        Roles: <span sec:authentication="principal.authorities"></span>
+    </div>
+
+    <div class="d-flex">
+
+        <a sec:authorize="hasAnyRole('ROLE_ADMIN')" th:href="@{/courses/showFormForAdd}"
+           class="p-2">
+            Add Course
+        </a>
+
+        <a th:href="@{/students/showFormToEnroll}"
+           class="p-2" >
+            Add new student
+        </a>
+
+        <a sec:authorize="hasAnyRole('ROLE_ADMIN')"  th:href="@{/courses/list}"
+           class="p-2" >
+            Available courses
+        </a>
+
+        <form th:action="@{/logout}" class="ml-auto p-2" method="POST">
+            <input type="submit" value="Logout"/>
+        </form>
+
+    </div>
+
+
+    <table class="table table-bordered table-striped">
+        <thead class="thead-dark">
+        <tr>
+            <th width="12%">First Name</th>
+            <th width="12%">Last Name</th>
+            <th width="12%">Email</th>
+            <th width="20%">List Of Courses Enrolled</th>
+            <th width="12%">Update Student</th>
+            <th width="12%" sec:authorize="hasAnyRole('ROLE_ADMIN')">Delete Student</th>
+        </tr>
+        </thead>
+
+        No students found!
+    </table>
+</div>
+
+
+</body>
+</html>

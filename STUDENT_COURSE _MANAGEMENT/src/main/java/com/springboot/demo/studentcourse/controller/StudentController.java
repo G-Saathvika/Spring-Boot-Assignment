@@ -4,7 +4,6 @@ import com.springboot.demo.studentcourse.dto.StudentDTO;
 import com.springboot.demo.studentcourse.enity.Course;
 import com.springboot.demo.studentcourse.enity.Student;
 import com.springboot.demo.studentcourse.service.CourseService;
-import com.springboot.demo.studentcourse.seviceImpl.MappingService;
 import com.springboot.demo.studentcourse.service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.StringTrimmerEditor;
@@ -15,27 +14,27 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.List;
+import java.util.stream.Collectors;
+
+import org.modelmapper.ModelMapper;
 
 @Controller
 @RequestMapping("/students")
 public class StudentController {
 
-    private MappingService mappingService;
+    @Autowired
+    private ModelMapper modelMapper;
 
+
+    @Autowired
     private StudentService studentService;
 
+    @Autowired
     private CourseService courseService;
 
     private static final String STUDENT = "student";
     private static final String COURSES = "courses";
     private static final String STUDENT_LIST= "redirect:/students/list";
-
-    @Autowired
-    public StudentController(StudentService theStudentService,CourseService theCourseService,MappingService theMappingService){
-        studentService = theStudentService;
-        courseService = theCourseService;
-        mappingService = theMappingService;
-    }
 
     @InitBinder
     public void initBinder(WebDataBinder dataBinder){
@@ -48,13 +47,16 @@ public class StudentController {
     @GetMapping("/list")
     public String findAll(Model theModel){
 
-        List<StudentDTO> students = mappingService.getAllStudentCourses();
+        List<Student> students = studentService.findAll();
 
-        if(students.isEmpty()){
+        List<StudentDTO> studentDTOS = students.stream().map(student -> modelMapper.map(student,StudentDTO.class)).collect(Collectors.toList());
+
+
+        if(studentDTOS == null){
             return "nostudent-list";
         }
         else {
-            theModel.addAttribute(STUDENT, students);
+            theModel.addAttribute(STUDENT, studentDTOS);
             return "students/student-list";
         }
     }
@@ -135,6 +137,28 @@ public class StudentController {
 
             return STUDENT_LIST;
         }
+    }
+
+    private StudentDTO convertToDTO(Student student){
+        StudentDTO studentDTO = modelMapper.map(student,StudentDTO.class);
+        studentDTO.setId(student.getId());
+        return studentDTO;
+    }
+
+    private Student convertToEntity(StudentDTO studentDTO){
+        Student student = modelMapper.map(studentDTO,Student.class);
+
+        student.setId(studentDTO.getId());
+
+        if(studentDTO.getId()>0){
+            Student oldStudent = studentService.findById(studentDTO.getId());
+            student.setFirstName(oldStudent.getFirstName());
+            student.setLastName(oldStudent.getLastName());
+            student.setEmail(oldStudent.getEmail());
+            student.setCourses(oldStudent.getCourses());
+        }
+
+        return student;
     }
 
 }

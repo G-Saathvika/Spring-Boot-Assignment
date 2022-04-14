@@ -55,22 +55,9 @@ public class StudentController {
         }
         else {
             theModel.addAttribute(STUDENT, students);
-
-            //System.out.println(students);
-
             return "students/student-list";
         }
     }
-
-//    @GetMapping("/list")
-//    public String findAll(Model theModel){
-//
-//        List<Student> students = studentService.findAll();
-//
-//        theModel.addAttribute(STUDENT,students);
-//
-//        return "students/student-list";
-//    }
 
     @GetMapping("/showFormForAdd")
     public String showFormForAdd(Model theModel){
@@ -85,7 +72,6 @@ public class StudentController {
 
         if(theBindingResult.hasErrors()){
 
-            //theModel.addAttribute(STUDENT,student);
             List<Course> courses = courseService.findAll();
             theModel.addAttribute(COURSES,courses);
 
@@ -139,11 +125,8 @@ public class StudentController {
 
         if(theBindingResult.hasErrors()){
 
-            //theModel.addAttribute(STUDENT,student);
             List<Course> courses = courseService.findAll();
             theModel.addAttribute(COURSES,courses);
-
-            //System.out.println("binding result:"+theBindingResult);
 
             return "students/enroll";
         }

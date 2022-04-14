@@ -19,7 +19,7 @@ public class Course {
     private int id;
 
     @Column(name = "title")
-    @NotEmpty(message = "* is required")
+    @NotEmpty(message = "title is required")
     @Pattern(regexp = "^[a-zA-Z]*",message = "Enter valid name")
     private String title;
 

@@ -27,7 +27,7 @@ public class StudentController {
     private CourseService courseService;
 
     private static final String STUDENT = "student";
-    private static final String COURSE = "courses";
+    private static final String COURSES = "courses";
     private static final String STUDENT_LIST= "redirect:/students/list";
 
     @Autowired
@@ -87,7 +87,7 @@ public class StudentController {
 
             //theModel.addAttribute(STUDENT,student);
             List<Course> courses = courseService.findAll();
-            theModel.addAttribute(COURSE,courses);
+            theModel.addAttribute(COURSES,courses);
 
             System.out.println("binding result:"+theBindingResult);
 
@@ -109,7 +109,7 @@ public class StudentController {
 
         List<Course> courses = courseService.findAll();
 
-        theModel.addAttribute(COURSE,courses);
+        theModel.addAttribute(COURSES,courses);
 
         return "students/student-form";
     }
@@ -129,7 +129,7 @@ public class StudentController {
 
         List<Course> courses = courseService.findAll();
 
-        theModel.addAttribute(COURSE,courses);
+        theModel.addAttribute(COURSES,courses);
 
         return "students/enroll";
     }
@@ -141,7 +141,7 @@ public class StudentController {
 
             //theModel.addAttribute(STUDENT,student);
             List<Course> courses = courseService.findAll();
-            theModel.addAttribute(COURSE,courses);
+            theModel.addAttribute(COURSES,courses);
 
             //System.out.println("binding result:"+theBindingResult);
 

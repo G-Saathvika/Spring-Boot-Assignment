@@ -7,6 +7,7 @@ import com.springboot.demo.studentcourse.service.CourseService;
 import com.springboot.demo.studentcourse.service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.StringTrimmerEditor;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -44,21 +45,44 @@ public class StudentController {
         dataBinder.registerCustomEditor(String.class,stringTrimmerEditor);
     }
 
+//    @GetMapping("/list")
+//    public String findAll(Model theModel){
+//
+//        List<Student> students = studentService.findAll();
+//
+//        List<StudentDTO> studentDTOS = students.stream().map(student -> modelMapper.map(student,StudentDTO.class)).collect(Collectors.toList());
+//
+//
+//        if(studentDTOS == null){
+//            return "nostudent-list";
+//        }
+//        else {
+//            theModel.addAttribute(STUDENT, studentDTOS);
+//            return "students/student-list";
+//        }
+//    }
+
     @GetMapping("/list")
-    public String findAll(Model theModel){
+    public String getAllPages(Model model){
+        return getOnePage(model, 1);
+    }
 
-        List<Student> students = studentService.findAll();
+    @GetMapping("/list/{pageNumber}")
+    public String getOnePage(Model theModel,@PathVariable("pageNumber") int currentPage){
 
-        List<StudentDTO> studentDTOS = students.stream().map(student -> modelMapper.map(student,StudentDTO.class)).collect(Collectors.toList());
+        Page<Student> page = studentService.getPaginatedStudents(currentPage);
+        int totalPages = page.getTotalPages();
+        long totalItems = page.getTotalElements();
 
+        List<Student> students = page.getContent();
 
-        if(studentDTOS == null){
-            return "nostudent-list";
-        }
-        else {
-            theModel.addAttribute(STUDENT, studentDTOS);
-            return "students/student-list";
-        }
+        theModel.addAttribute("currentPage",currentPage);
+        theModel.addAttribute("totalPages",totalPages);
+        theModel.addAttribute("totalItems",totalItems);
+        theModel.addAttribute(STUDENT,students);
+
+        return "students/student-list";
+
     }
 
     @GetMapping("/showFormForAdd")

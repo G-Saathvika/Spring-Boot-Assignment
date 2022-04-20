@@ -23,9 +23,6 @@ public class Course {
     @Pattern(regexp = "^[a-zA-Z]*",message = "Enter valid name")
     private String title;
 
-    @ManyToOne(cascade = {CascadeType.PERSIST,CascadeType.MERGE,CascadeType.DETACH,CascadeType.REFRESH})
-    @JoinColumn(name = "instructor_id")
-    private Instructor instructor;
 
     @ManyToMany(fetch = FetchType.LAZY,cascade = {CascadeType.PERSIST,CascadeType.MERGE,CascadeType.DETACH,CascadeType.REFRESH})
     @JoinTable(

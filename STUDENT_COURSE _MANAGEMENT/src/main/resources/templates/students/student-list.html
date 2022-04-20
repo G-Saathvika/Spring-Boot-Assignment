@@ -100,6 +100,16 @@
 
         </tbody>
     </table>
+
+    <footer style="font-size: large" class="panel-footer">
+        Total Items [[${totalItems}]] : Page [[${currentPage}]] of [[${totalPages}]]
+        &nbsp; &nbsp; - &nbsp;
+        <span th:each="i: ${#numbers.sequence(1, totalPages)}">
+        <a th:href="@{'/students/list/' + ${i}}">[[${i}]]</a>
+        &nbsp; &nbsp;
+    </span>
+    </footer>
+
  </div>
 
 

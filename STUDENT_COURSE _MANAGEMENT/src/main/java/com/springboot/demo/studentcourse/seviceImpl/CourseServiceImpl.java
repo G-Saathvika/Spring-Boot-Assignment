@@ -11,13 +11,8 @@ import java.util.List;
 @Service
 public class CourseServiceImpl implements CourseService {
 
-    private CourseRepository courseRepository;
-
     @Autowired
-    public CourseServiceImpl(CourseRepository theCourseRepository){
-        courseRepository = theCourseRepository;
-    }
-
+    private CourseRepository courseRepository;
 
     @Override
     public List<Course> findAll() {
